@@ -119,6 +119,22 @@ app.post("/api/score", function (req, res) {
   res.end("Success");
 });
 
+app.get("/api/score/:id", (req, res) => {
+  const idUser = req.params.id;
+  console.log(req.params.id);
+  connection.query(
+    "SELECT * FROM member WHERE idUser = ?",
+    [idUser],
+    (err, result) => {
+      if (err) {
+        res.status(500).send("Error retrieving data from database");
+      } else {
+        res.status(200).json(result);
+      }
+    }
+  );
+});
+
 app.get("/api/users/:id", (req, res) => {
   const { id } = req.params;
   connection.query("SELECT * FROM usersdata where id=?", [id], (err) => {
