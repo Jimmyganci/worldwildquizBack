@@ -15,30 +15,15 @@ const corsOptions = {
 app.use(cors(corsOptions));
 
 app.use(express.json()).use(express.urlencoded({ extended: false }));
-
+app.set("trust proxy", 1);
 app.use(
   session({
     resave: false, // don't save session if unmodified
     saveUninitialized: false, // don't create session until something stored
     secret: "12345",
-    cookie: { path: "/login", maxAge: 60000 },
+    cookie: { path: "/login", maxAge: 60000, secure: true },
   })
 );
-
-// Session-persisted message middleware
-
-// app.use(function (req, res, next) {
-//   var err = req.session.error;
-//   var msg = req.session.success;
-//   delete req.session.error;
-//   delete req.session.success;
-//   res.locals.message = "";
-//   if (err) res.locals.message = '<p class="msg error">' + err + "</p>";
-//   if (msg) res.locals.message = '<p class="msg success">' + msg + "</p>";
-//   next();
-// });
-
-// app.use(cookieParser());
 
 app.get("/login", function (req, res) {
   res.json(req.session.user);
