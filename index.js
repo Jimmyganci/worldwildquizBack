@@ -53,21 +53,6 @@ app.post("/logout", (req, res) => {
   }
 });
 
-// app.post("/login", (req, res, next) => {
-//   console.log(req.body);
-//   req.session.regenerate(function (err) {
-//     if (err) {
-//       console.log(err);
-//     } else {
-//       req.session.user = req.body;
-//       res.locals.user = req.body;
-//       res.status(200).json(req.session.user);
-//       console.log(req.session);
-//       next();
-//     }
-//   });
-// });
-
 app.get("/api/score", (req, res) => {
   let sql = `select * from member`;
   const sqlValues = [];
@@ -184,6 +169,40 @@ app.post("/api/users", (req, res) => {
       } else {
         const posted = { pseudo, mail, password };
         res.status(201).json(posted);
+      }
+    }
+  );
+});
+
+app.put("/api/users/:id", (req, res) => {
+  const userId = req.params.id;
+  pool.query(
+    "SELECT * FROM usersdata WHERE id = ?",
+    [userId],
+    (err, selectUser) => {
+      if (err) {
+        console.log(err);
+        res.status(500).send("Error");
+      } else {
+        const userFromDb = selectUser[0];
+        if (userFromDb) {
+          const userToUpdate = req.body;
+          pool.query(
+            "UPDATE usersdata SET ? WHERE id = ?",
+            [userToUpdate, userId],
+            (error) => {
+              if (error) {
+                console.log(error);
+                res.status(500).send("Error updating a user");
+              } else {
+                const updated = { ...userFromDb, ...userToUpdate };
+                res.status(200).json(updated);
+              }
+            }
+          );
+        } else {
+          res.status(404).send(`Heroes with id ${userId} not found.`);
+        }
       }
     }
   );
