@@ -1,8 +1,6 @@
 const express = require("express");
 const cors = require("cors");
-const bodyParser = require("body-parser");
 const connection = require("./db_config");
-// const cookieParser = require("cookie-parser"); // module for parsing cookies
 const session = require("express-session");
 
 const app = express();
@@ -15,24 +13,24 @@ const corsOptions = {
 };
 app.use(cors(corsOptions));
 
-app.use(
-  bodyParser.urlencoded({
-    extended: true,
-  })
-);
-app.use(bodyParser.json());
-
 app.use(express.json()).use(express.urlencoded({ extended: false }));
 
-app.set("trust proxy", 1);
+// app.set("trust proxy", 1);
 app.use(
   session({
     resave: false, // don't save session if unmodified
     saveUninitialized: false, // don't create session until something stored
     secret: "12345",
-    cookie: { path: "/login", maxAge: 60000, sameSite: "none" },
+    cookie: { path: "/", maxAge: 60000 },
   })
 );
+
+app.post("/login", (req, res) => {
+  const sess = req.session;
+  sess.user = req.body;
+  req.session.save();
+  res.json(req.session.user);
+});
 
 app.get("/login", function (req, res) {
   res.json(req.session.user);
@@ -48,31 +46,18 @@ app.post("/logout", (req, res) => {
     });
   }
 });
-app.post(
-  "/login",
-  bodyParser.urlencoded({
-    extended: true,
-  }),
-  (req, res, next) => {
-    res.locals.user = req.body;
-    next();
-  },
-  (req, res) => {
-    req.session.user = res.locals.user;
-    res.status(200).json(req.session.user);
-    console.log(req.session);
-  }
-);
 
-// app.post("/login", (req, res) => {
+// app.post("/login", (req, res, next) => {
 //   console.log(req.body);
 //   req.session.regenerate(function (err) {
 //     if (err) {
 //       console.log(err);
 //     } else {
 //       req.session.user = req.body;
+//       res.locals.user = req.body;
 //       res.status(200).json(req.session.user);
 //       console.log(req.session);
+//       next();
 //     }
 //   });
 // });

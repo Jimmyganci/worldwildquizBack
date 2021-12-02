@@ -8,6 +8,7 @@
   "main": "index.js",
   "dependencies": {
     "body-parser": "^1.19.0",
+    "connect-redis": "^6.0.0",
     "cookie-parser": "^1.4.6",
     "cors": "^2.8.5",
     "dotenv": "^10.0.0",
@@ -15,7 +16,8 @@
     "express-session": "^1.17.2",
     "heroku": "^7.59.2",
     "mysql2": "^2.3.3",
-    "nodemon": "^2.0.15"
+    "nodemon": "^2.0.15",
+    "redis": "^4.0.0"
   },
   "devDependencies": {},
   "scripts": {
