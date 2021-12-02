@@ -14,17 +14,15 @@ const corsOptions = {
 };
 app.use(cors(corsOptions));
 
+app.use(express.json()).use(express.urlencoded({ extended: false }));
+
 app.use(
   session({
-    name: "auth",
+    resave: false, // don't save session if unmodified
+    saveUninitialized: false, // don't create session until something stored
     secret: "12345",
-    resave: false,
-    saveUninitialized: false,
-    cookie: { maxAge: 60000 },
   })
 );
-
-app.use(express.json()).use(express.urlencoded({ extended: false }));
 
 app.post("/login", (req, res) => {
   req.session.user = req.body;
@@ -34,8 +32,8 @@ app.post("/login", (req, res) => {
 
 app.use(cookieParser());
 
-app.get("/login", (req, res) => {
-  res.json(req.session.user);
+app.get("/login", function (req, res) {
+  res.render("login");
 });
 
 app.post("/logout", (req, res) => {
