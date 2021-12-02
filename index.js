@@ -49,7 +49,7 @@ app.post("/logout", (req, res) => {
 });
 
 app.get("/api/score", (req, res) => {
-  let sql = `select * from ${table}`;
+  let sql = `select * from member`;
   const sqlValues = [];
   console.log(req.query.game_type);
   if (req.query.game_type) {
@@ -109,7 +109,7 @@ app.post("/api/score", function (req, res) {
   const { pseudo, idUser, score, game, region, gameType } = req.body;
   // Do a MySQL query.
   connection.query(
-    `INSERT INTO ${table} (pseudo, idUser, score, game, region, game_type) VALUES ('${pseudo}', '${idUser}', '${score}', '${game}', '${region}', '${gameType}')`
+    `INSERT INTO member (pseudo, idUser, score, game, region, game_type) VALUES ('${pseudo}', '${idUser}', '${score}', '${game}', '${region}', '${gameType}')`
   );
   res.end("Success");
 });
