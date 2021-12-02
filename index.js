@@ -15,13 +15,17 @@ app.use(cors(corsOptions));
 
 app.use(express.json()).use(express.urlencoded({ extended: false }));
 
-// app.set("trust proxy", 1);
+app.set("trust proxy", 1);
 app.use(
   session({
-    resave: false, // don't save session if unmodified
-    saveUninitialized: false, // don't create session until something stored
     secret: "12345",
-    cookie: { path: "/", maxAge: 60000 },
+    saveUninitialized: false,
+    resave: false,
+    unset: "destroy",
+    cookie: {
+      sameSite: "Lax",
+      maxAge: 60000,
+    },
   })
 );
 
