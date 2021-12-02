@@ -22,9 +22,11 @@ app.use(
     saveUninitialized: false,
     resave: false,
     unset: "destroy",
+    httpOnly: false,
     cookie: {
-      sameSite: "Lax",
+      sameSite: "none",
       maxAge: 60000,
+      secure: true,
     },
   })
 );
