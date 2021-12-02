@@ -24,7 +24,7 @@ app.use(
   })
 );
 
-app.use(express.json()).use(express.urlencoded({ extended: true }));
+app.use(express.json()).use(express.urlencoded({ extended: false }));
 
 app.post("/login", (req, res) => {
   req.session.user = req.body;
