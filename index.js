@@ -1,7 +1,7 @@
 const express = require("express");
 const cors = require("cors");
 const connection = require("./db_config");
-const cookieParser = require("cookie-parser"); // module for parsing cookies
+// const cookieParser = require("cookie-parser"); // module for parsing cookies
 const session = require("express-session");
 
 const app = express();
@@ -21,19 +21,27 @@ app.use(
     resave: false, // don't save session if unmodified
     saveUninitialized: false, // don't create session until something stored
     secret: "12345",
+    cookie: { path: "/login", maxAge: 60000 },
   })
 );
 
-app.post("/login", (req, res) => {
-  req.session.user = req.body;
-  req.session.save();
-  res.json(req.session.user);
+// Session-persisted message middleware
+
+app.use(function (req, res, next) {
+  var err = req.session.error;
+  var msg = req.session.success;
+  delete req.session.error;
+  delete req.session.success;
+  res.locals.message = "";
+  if (err) res.locals.message = '<p class="msg error">' + err + "</p>";
+  if (msg) res.locals.message = '<p class="msg success">' + msg + "</p>";
+  next();
 });
 
-app.use(cookieParser());
+// app.use(cookieParser());
 
 app.get("/login", function (req, res) {
-  res.render("login");
+  res.json(req.session.user);
 });
 
 app.post("/logout", (req, res) => {
@@ -45,6 +53,14 @@ app.post("/logout", (req, res) => {
       }
     });
   }
+});
+
+app.post("/login", (req, res) => {
+  req.session.regenerate(function (err) {
+    req.session.user = req.body;
+    res.json(req.session.user);
+    console.log(req.session);
+  });
 });
 
 app.get("/api/score", (req, res) => {
