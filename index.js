@@ -15,7 +15,15 @@ const corsOptions = {
 };
 app.use(cors(corsOptions));
 
+app.use(
+  bodyParser.urlencoded({
+    extended: true,
+  })
+);
+app.use(bodyParser.json());
+
 app.use(express.json()).use(express.urlencoded({ extended: false }));
+
 app.set("trust proxy", 1);
 app.use(
   session({
@@ -42,7 +50,9 @@ app.post("/logout", (req, res) => {
 });
 app.post(
   "/login",
-  bodyParser.urlencoded(),
+  bodyParser.urlencoded({
+    extended: true,
+  }),
   (req, res, next) => {
     res.locals.user = req.body;
     next();
