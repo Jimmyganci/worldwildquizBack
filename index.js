@@ -1,5 +1,6 @@
 const express = require("express");
 const cors = require("cors");
+const bodyParser = require("body-parser");
 const connection = require("./db_config");
 // const cookieParser = require("cookie-parser"); // module for parsing cookies
 const session = require("express-session");
@@ -39,19 +40,32 @@ app.post("/logout", (req, res) => {
     });
   }
 });
+app.post(
+  "/login",
+  bodyParser.urlencoded(),
+  (req, res, next) => {
+    res.locals.user = req.body;
+    next();
+  },
+  (req, res) => {
+    req.session.user = res.locals.user;
+    res.status(200).json(req.session.user);
+    console.log(req.session);
+  }
+);
 
-app.post("/login", (req, res) => {
-  console.log(req.body);
-  req.session.regenerate(function (err) {
-    if (err) {
-      console.log(err);
-    } else {
-      req.session.user = req.body;
-      res.status(200).json(req.session.user);
-      console.log(req.session);
-    }
-  });
-});
+// app.post("/login", (req, res) => {
+//   console.log(req.body);
+//   req.session.regenerate(function (err) {
+//     if (err) {
+//       console.log(err);
+//     } else {
+//       req.session.user = req.body;
+//       res.status(200).json(req.session.user);
+//       console.log(req.session);
+//     }
+//   });
+// });
 
 app.get("/api/score", (req, res) => {
   let sql = `select * from member`;
