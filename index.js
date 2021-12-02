@@ -21,7 +21,7 @@ app.use(
     resave: false, // don't save session if unmodified
     saveUninitialized: false, // don't create session until something stored
     secret: "12345",
-    cookie: { path: "/login", maxAge: 60000 },
+    cookie: { path: "/login", maxAge: 60000, sameSite: "none" },
   })
 );
 
