@@ -176,7 +176,7 @@ app.post("/api/users", (req, res) => {
 
 app.put("/api/users/:id", (req, res) => {
   const userId = req.params.id;
-  pool.query(
+  connection.query(
     "SELECT * FROM usersdata WHERE id = ?",
     [userId],
     (err, selectUser) => {
@@ -187,7 +187,7 @@ app.put("/api/users/:id", (req, res) => {
         const userFromDb = selectUser[0];
         if (userFromDb) {
           const userToUpdate = req.body;
-          pool.query(
+          connection.query(
             "UPDATE usersdata SET ? WHERE id = ?",
             [userToUpdate, userId],
             (error) => {
