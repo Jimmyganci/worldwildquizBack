@@ -16,6 +16,7 @@ app.use(cors(corsOptions));
 
 app.use(
   session({
+    name: "auth",
     secret: "12345",
     resave: false,
     saveUninitialized: false,
@@ -25,13 +26,13 @@ app.use(
 
 app.use(express.json()).use(express.urlencoded({ extended: true }));
 
-app.use(cookieParser());
-
 app.post("/login", (req, res) => {
   req.session.user = req.body;
   req.session.save();
   res.json(req.session.user);
 });
+
+app.use(cookieParser());
 
 app.get("/login", (req, res) => {
   res.json(req.session.user);
