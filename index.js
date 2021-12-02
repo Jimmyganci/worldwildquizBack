@@ -21,7 +21,7 @@ app.use(
     resave: false, // don't save session if unmodified
     saveUninitialized: false, // don't create session until something stored
     secret: "12345",
-    cookie: { path: "/login", maxAge: 60000, secure: true },
+    cookie: { path: "/login", maxAge: 60000 },
   })
 );
 
@@ -41,10 +41,15 @@ app.post("/logout", (req, res) => {
 });
 
 app.post("/login", (req, res) => {
+  console.log(req.body);
   req.session.regenerate(function (err) {
-    req.session.user = req.body;
-    res.json(req.session.user);
-    console.log(req.session);
+    if (err) {
+      console.log(err);
+    } else {
+      req.session.user = req.body;
+      res.status(200).json(req.session.user);
+      console.log(req.session);
+    }
   });
 });
 
