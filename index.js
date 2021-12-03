@@ -28,11 +28,11 @@ app.use(
     saveUninitialized: false,
     resave: false,
     // unset: "destroy",
-    // httpOnly: false,
+    httpOnly: false,
     cookie: {
       sameSite: "none",
       maxAge: 60000,
-      //   secure: true,
+      secure: true,
     },
     store: new redisStore({ client: redisClient }),
   })
