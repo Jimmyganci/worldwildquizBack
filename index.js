@@ -28,7 +28,7 @@ app.use(
     secret: "12345",
     saveUninitialized: false,
     resave: false,
-    unset: "destroy",
+    // unset: "destroy",
     httpOnly: false,
     cookie: {
       sameSite: "none",
@@ -42,11 +42,11 @@ app.use(
 app.post("/login", (req, res) => {
   const sess = req.session;
   sess.user = req.body;
-  req.session.save();
+  //   req.session.save();
   res.json(req.session.user);
 });
 
-app.get("/login", function (req, res) {
+app.get("/login", (req, res) => {
   res.json(req.session.user);
 });
 
