@@ -5,6 +5,7 @@ const session = require("express-session");
 const redis = require("redis");
 const redisClient = redis.createClient(process.env.REDIS_URL);
 const redisStore = require("connect-redis")(session);
+require("dotenv").config();
 
 const app = express();
 const port = process.env.PORT || 9000;
