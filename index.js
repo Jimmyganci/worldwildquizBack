@@ -28,8 +28,8 @@ app.use(
     secret: "12345",
     saveUninitialized: false,
     resave: false,
-    unset: "destroy",
-    httpOnly: false,
+    // unset: "destroy",
+    // httpOnly: false,
     cookie: {
       sameSite: "none",
       maxAge: 60000,
