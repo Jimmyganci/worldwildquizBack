@@ -2,16 +2,16 @@ const express = require("express");
 const cors = require("cors");
 const connection = require("./db_config");
 const session = require("express-session");
-const redis = require("redis");
-const redisClient = redis.createClient(process.env.REDIS_URL);
-const redisStore = require("connect-redis")(session);
+// const redis = require("redis");
+// const redisClient = redis.createClient(process.env.REDIS_URL);
+// const redisStore = require("connect-redis")(session);
 
 const app = express();
 const port = process.env.PORT || 9000;
 
-redisClient.on("error", (err) => {
-  console.log("Redis error: ", err);
-});
+// redisClient.on("error", (err) => {
+//   console.log("Redis error: ", err);
+// });
 
 const corsOptions = {
   origin: "https://jimmyganci.github.io",
@@ -35,19 +35,16 @@ app.use(
       maxAge: 60000,
       secure: true,
     },
-    store: new redisStore({ client: redisClient }),
+    // store: new redisStore({ client: redisClient }),
   })
 );
 
 app.post("/login", async (req, res) => {
   const sess = req.session;
   //   req.session.save();
-  try {
-    sess.user = req.body;
-    res.json(req.session.user);
-  } catch (err) {
-    console.log(err);
-  }
+  sess.user = req.body;
+  res.json(req.session.user);
+  console.log(err);
 });
 
 app.get("/login", (req, res) => {
