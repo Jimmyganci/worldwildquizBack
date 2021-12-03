@@ -42,12 +42,12 @@ app.get("/login", function (req, res) {
   res.json(req.session.user);
 });
 
-app.post("/logout", (req, res) => {
+app.get("/logout", (req, res) => {
   req.session.destroy((error) => {
     if (error) {
       console.log(error);
     } else {
-      res.redirect("/#/");
+      res.redirect("/");
     }
   });
 });
