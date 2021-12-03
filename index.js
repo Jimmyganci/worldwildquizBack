@@ -14,7 +14,7 @@ redisClient.on("error", (err) => {
 });
 
 const corsOptions = {
-  origin: true,
+  origin: "https://jimmyganci.github.io",
   credentials: true, // access-control-allow-credentials:true
   optionSuccessStatus: 200,
 };
@@ -40,7 +40,6 @@ app.use(
 );
 
 app.post("/login", (req, res) => {
-  res.setHeader("Access-Control-Allow-Origin", "https://jimmyganci.github.io");
   const sess = req.session;
   sess.user = req.body;
   req.session.save();
@@ -48,12 +47,10 @@ app.post("/login", (req, res) => {
 });
 
 app.get("/login", function (req, res) {
-  res.setHeader("Access-Control-Allow-Origin", "https://jimmyganci.github.io");
   res.json(req.session.user);
 });
 
 app.get("/logout", (req, res) => {
-  res.setHeader("Access-Control-Allow-Origin", "https://jimmyganci.github.io");
   req.session.destroy((error) => {
     if (error) {
       console.log(error);
