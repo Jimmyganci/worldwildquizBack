@@ -2,9 +2,16 @@ const express = require("express");
 const cors = require("cors");
 const connection = require("./db_config");
 const session = require("express-session");
+const redis = require("redis");
+const connectRedis = require("connect-redis");
 
 const app = express();
 const port = process.env.PORT || 9000;
+
+const RedisStore = connectRedis(session);
+
+//Configure redis client
+const redisClient = redis.createClient(process.env.REDIS_URL);
 
 const corsOptions = {
   origin: true,
@@ -15,9 +22,17 @@ app.use(cors(corsOptions));
 
 app.use(express.json()).use(express.urlencoded({ extended: false }));
 
+redisClient.on("error", function (err) {
+  console.log("Could not establish a connection with redis. " + err);
+});
+redisClient.on("connect", function (err) {
+  console.log("Connected to redis successfully");
+});
+
 app.set("trust proxy", 1);
 app.use(
   session({
+    store: new RedisStore({ client: redisClient }),
     secret: "12345",
     saveUninitialized: false,
     resave: false,
