@@ -14,7 +14,7 @@ redisClient.on("error", (err) => {
 });
 
 const corsOptions = {
-  origin: "*",
+  origin: true,
   credentials: true, // access-control-allow-credentials:true
   optionSuccessStatus: 200,
 };
@@ -40,6 +40,7 @@ app.use(
 );
 
 app.post("/login", (req, res) => {
+  res.setHeader("Access-Control-Allow-Origin", "*");
   const sess = req.session;
   sess.user = req.body;
   req.session.save();
