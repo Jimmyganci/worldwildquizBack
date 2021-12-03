@@ -28,11 +28,11 @@ app.use(
     saveUninitialized: false,
     resave: false,
     // unset: "destroy",
-    httpOnly: false,
+    // httpOnly: false,
     cookie: {
       sameSite: "none",
       maxAge: 60000,
-      secure: true,
+      //   secure: true,
     },
     store: new redisStore({ client: redisClient }),
   })
@@ -50,14 +50,15 @@ app.get("/login", (req, res) => {
   res.json(req.session.user);
 });
 
-app.get("/logout", (req, res) => {
-  req.session.destroy((error) => {
-    if (error) {
-      console.log(error);
-    } else {
-      res.redirect("/");
-    }
-  });
+app.delete("/logout", function (req, res) {
+  if (req.session) {
+    req.session.destroy(function () {
+      res.clearCookie("connect.sid", { path: "/" });
+      res.send("removed session");
+    });
+  } else {
+    res.send("no session assigned");
+  }
 });
 
 app.get("/api/score", (req, res) => {
