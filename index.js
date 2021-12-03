@@ -39,7 +39,7 @@ app.use(
   })
 );
 
-app.post("/login", (req, res) => {
+app.post("/login", async (req, res) => {
   const sess = req.session;
   //   req.session.save();
   try {
