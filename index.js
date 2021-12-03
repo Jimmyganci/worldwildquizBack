@@ -44,7 +44,6 @@ app.post("/login", async (req, res) => {
   //   req.session.save();
   sess.user = req.body;
   res.json(req.session.user);
-  console.log(err);
 });
 
 app.get("/login", (req, res) => {
