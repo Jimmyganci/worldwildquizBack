@@ -1,18 +1,18 @@
 const express = require("express");
+const app = express();
 const cors = require("cors");
 const connection = require("./db_config");
 const session = require("express-session");
-const redis = require("redis");
+const redis = require("ioredis");
 const redisClient = redis.createClient(process.env.REDIS_URL);
-// const redisStore = require("connect-redis")(session);
+const redisStore = require("connect-redis")(session);
 
-const app = express();
 const port = process.env.PORT || 9000;
 
 redisClient.on("error", (err) => {
   console.log("Redis error: ", err);
 });
-
+app.set("trust proxy", 1);
 const corsOptions = {
   origin: "https://jimmyganci.github.io",
   credentials: true, // access-control-allow-credentials:true
@@ -22,7 +22,6 @@ app.use(cors(corsOptions));
 
 app.use(express.json()).use(express.urlencoded({ extended: false }));
 
-app.set("trust proxy", 1);
 app.use(
   session({
     secret: "12345",
@@ -35,7 +34,7 @@ app.use(
       maxAge: 60000,
       secure: true,
     },
-    // store: new redisStore({ client: redisClient }),
+    store: new redisStore({ client: redisClient }),
   })
 );
 
