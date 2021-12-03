@@ -43,11 +43,7 @@ app.get("/login", function (req, res) {
 });
 
 app.post("/logout", (req, res) => {
-  req.session.destroy((error) => {
-    if (error) {
-      console.log(error);
-    }
-  });
+  req.session.destroy();
 });
 
 app.get("/api/score", (req, res) => {
