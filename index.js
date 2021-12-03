@@ -43,7 +43,11 @@ app.post("/login", (req, res) => {
   const sess = req.session;
   sess.user = req.body;
   //   req.session.save();
-  res.json(req.session.user);
+  try {
+    res.json(req.session.user);
+  } catch (err) {
+    console.log(err);
+  }
 });
 
 app.get("/login", (req, res) => {
