@@ -38,16 +38,14 @@ app.use(
     store: new redisStore({ client: redisClient }),
   })
 );
-try {
-  app.post("/login", async (req, res) => {
-    const sess = req.session;
-    //   req.session.save();
-    sess.user = req.body;
-    res.json(req.session.user);
-  });
-} catch (err) {
-  console.log(err);
-}
+
+app.post("/login", async (err, req, res) => {
+  const sess = req.session;
+  //   req.session.save();
+  sess.user = req.body;
+  res.json(req.session.user);
+  if (err) console.log(err);
+});
 
 app.get("/login", (req, res) => {
   res.json(req.session.user);
