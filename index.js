@@ -54,10 +54,10 @@ app.delete("/logout", function (req, res) {
   if (req.session) {
     req.session.destroy(function () {
       res.clearCookie("connect.sid", { path: "/" });
-      res.send("removed session");
+      res.status(200).send("removed session");
     });
   } else {
-    res.send("no session assigned");
+    res.status(400).send("no session assigned");
   }
 });
 
