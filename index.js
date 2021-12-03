@@ -7,7 +7,7 @@ const connectRedis = require("connect-redis");
 
 const app = express();
 const port = process.env.PORT || 9000;
-
+app.set("trust proxy", 1);
 const RedisStore = connectRedis(session);
 
 //Configure redis client
@@ -29,7 +29,6 @@ redisClient.on("connect", function (err) {
   console.log("Connected to redis successfully");
 });
 
-app.set("trust proxy", 1);
 app.use(
   session({
     store: new RedisStore({ client: redisClient }),
@@ -54,7 +53,8 @@ app.post("/login", (req, res) => {
 });
 
 app.get("/login", function (req, res) {
-  res.json(req.session.user);
+  const sess = req.session;
+  res.json(sess);
 });
 
 app.get("/logout", (req, res) => {
